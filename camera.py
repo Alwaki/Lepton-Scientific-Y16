@@ -1,3 +1,4 @@
+# Run v4l2 command to set pixelformat in Y16
 import subprocess
 subprocess.run([
     "v4l2-ctl",
@@ -27,8 +28,6 @@ while True:
     if not ret:
         break
 
-    #print(frame.shape, frame.dtype)
-
     # Reinterpret raw 16-bit data
     data = frame.view(np.uint16)
 
@@ -36,8 +35,10 @@ while True:
     data = cv2.normalize(data, None, 0, 255, cv2.NORM_MINMAX)
     data = np.uint8(data)
     data = cv2.applyColorMap(data, cv2.COLORMAP_INFERNO)
-    disp_large = cv2.resize(data, None, fx=4, fy=4, interpolation=cv2.INTER_NEAREST)
-    cv2.imshow('Lepton Radiometric (Y16)', disp_large)
+    disp = cv2.resize(data, None, fx=4, fy=4, interpolation=cv2.INTER_NEAREST)
+
+    # Use CV2 to show image
+    cv2.imshow('Lepton Radiometric (Y16)', disp)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
